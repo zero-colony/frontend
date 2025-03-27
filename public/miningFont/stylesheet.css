@@ -1,0 +1,21 @@
+@font-face {
+  font-family: 'Helvetica';
+  src: url('Helvetica-Regular.eot');
+  src: url('Helvetica-Regular.eot?#iefix') format('embedded-opentype'),
+    url('Helvetica-Regular.woff2') format('woff2'),
+    url('Helvetica-Regular.woff') format('woff'),
+    url('Helvetica-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Play';
+  src: url('Play-Bold.eot');
+  src: url('Play-Bold.eot?#iefix') format('embedded-opentype'),
+    url('Play-Bold.woff2') format('woff2'), url('Play-Bold.woff') format('woff'),
+    url('Play-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}

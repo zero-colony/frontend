@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Cache-Control" content="max-age=0" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Zero Colony App</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+
+      body::after {
+        content: '';
+        color: #fff;
+        background-color: #000;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        z-index: -1;
+        padding-top: 50px;
+        text-align: center;
+      }
+
+      div.root {
+        z-index: 0;
+      }
+
+      /* Modal Overlay Styles */
+      .modal-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Modal Content Styles */
+      .modal-content {
+        position: relative;
+        width: 50vw;
+        /* Half of viewport width */
+        aspect-ratio: 16/9;
+        /* Maintain video aspect ratio */
+        background: #000;
+        border-radius: 8px;
+      }
+
+      /* YouTube iframe Styles */
+      .modal-content iframe {
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+      }
+
+      /* Close Button Styles */
+      .close-btn {
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 30px;
+        height: 30px;
+        background: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1001;
+      }
+
+      .close-btn:hover {
+        background: #e0e0e0;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .modal-content {
+          width: 90vw;
+          /* Wider on mobile */
+        }
+
+        .close-btn {
+          right: 0;
+          top: -40px;
+        }
+      }
+
+      .links-content {
+        background: #000000;
+        padding: 2rem;
+        aspect-ratio: auto;
+        height: auto;
+      }
+
+      .links-popup-content {
+        text-align: center;
+      }
+
+      .links-popup-content h2 {
+        margin-bottom: 1rem;
+        color: #ffffff;
+        font-family: 'Helvetica', sans-serif;
+        font-weight: 400;
+      }
+
+      .links-popup-content p {
+        margin-bottom: 1.5rem;
+        color: #ffffff;
+        font-family: 'Helvetica', sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+      }
+
+      .social-links a {
+        color: #fe5161;
+        text-decoration: none;
+        font-family: 'Helvetica', sans-serif;
+      }
+
+      .social-links a:hover {
+        text-decoration: underline;
+        filter: drop-shadow(0px 0px 10px #fe5161);
+      }
+    </style>
+    <link rel="stylesheet" href="%PUBLIC_URL%/index.css?32" />
+    <link
+      rel="shortcut icon"
+      href="%PUBLIC_URL%/favicon.ico"
+      type="image/x-icon"
+    />
+    <script src="https://www.googleoptimize.com/optimize.js?id=OPT-TRKZWWG"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-202312084-1"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'UA-202312084-1');
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-WDJK6BF');
+    </script>
+    <!-- End Google Tag Manager -->
+    <!-- GLEAM -->
+    <script>
+      (function (d, t) {
+        var key = 'Bm7eO';
+        var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+        g.src = 'https://js.gleam.io/' + key + '/trk.js';
+        s.parentNode.insertBefore(g, s);
+      })(document, 'script');
+    </script>
+
+    <script>
+      var Gleam = Gleam || [];
+    </script>
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-WDJK6BF"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <!-- <script>
+      window.addEventListener('eip6963:announceProvider', (event) => {
+        console.log(event);
+      });
+
+      window.dispatchEvent(new Event('eip6963:requestProvider'));
+    </script> -->
+    <!-- Popup Modal -->
+    <div id="popup" class="modal-overlay">
+      <div class="modal-content">
+        <button id="closeBtn" class="close-btn">&times;</button>
+        <!-- Replace 'YOUTUBE_VIDEO_ID' with your actual YouTube video ID -->
+        <iframe
+          width="1352"
+          height="553"
+          src="https://www.youtube.com/embed/3GAuJJS_S9M"
+          title="Welcome video Zero Colony"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+
+    <!-- Links Popup Modal -->
+    <div id="linksPopup" class="modal-overlay" style="display: none">
+      <div class="modal-content links-content">
+        <button id="closeLinksBtn" class="close-btn">&times;</button>
+        <div class="links-popup-content">
+          <h2>Welcome to Zero Colony! 🚀</h2>
+          <p>
+            Your land is now secured. The journey has just begun—connect with
+            the community and stay ahead.
+          </p>
+          <div class="social-links">
+            <a href="https://twitter.com/zero_colony_fun" target="_blank"
+              >X: @zero_colony_fun</a
+            >
+            <a href="https://t.me/zerocolonygang" target="_blank"
+              >TG: @zerocolonygang</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Get references to the popup and its close button.
+      const popup = document.getElementById('popup');
+      const closeBtn = document.getElementById('closeBtn');
+      const linksPopup = document.getElementById('linksPopup');
+      const closeLinksBtn = document.getElementById('closeLinksBtn');
+
+      // Add a click event to the close button to hide the popup.
+      closeBtn.addEventListener('click', () => {
+        popup.style.display = 'none';
+      });
+
+      // Add a click event to the links popup close button
+      closeLinksBtn.addEventListener('click', () => {
+        linksPopup.style.display = 'none';
+      });
+
+      // Global function to open links popup
+      window.openLinksPopup = function () {
+        linksPopup.style.display = 'flex';
+      };
+    </script>
+
+    <script type="text/javascript">
+      (function (c, l, a, r, i, t, y) {
+        c[a] =
+          c[a] ||
+          function () {
+            (c[a].q = c[a].q || []).push(arguments);
+          };
+
+        t = l.createElement(r);
+        t.async = 1;
+        t.src = 'https://www.clarity.ms/tag/' + i;
+
+        y = l.getElementsByTagName(r)[0];
+        y.parentNode.insertBefore(t, y);
+      })(window, document, 'clarity', 'script', 'qdtvgz7mfe');
+    </script>
+  </body>
+</html>
