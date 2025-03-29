@@ -1,9 +1,8 @@
 import Graphic from '@arcgis/core/Graphic';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
-import PopupTemplate from '@arcgis/core/PopupTemplate';
 import PolygonSymbol3D from '@arcgis/core/symbols/PolygonSymbol3D';
 import SceneView from '@arcgis/core/views/SceneView';
-import { createLandPlotPopupTemplate } from '@features/global/utils/createPopupTemplate';
+import { generateBlockie } from '@features/global/utils/blockie.canvas';
 import {
   PartedMarsMainWrapper,
   PartedMarsViewWrapper,
@@ -16,26 +15,22 @@ import {
   toLong,
   toTokenNumber,
 } from '@features/globus/utils/methods';
+import {
+  arrow,
+  autoUpdate,
+  flip,
+  FloatingArrow,
+  offset,
+  shift,
+  useFloating,
+} from '@floating-ui/react';
+import { cn } from '@root/lib/utils';
 import { NETWORK_DATA } from '@root/settings';
 import { addressSelector } from '@selectors/userStatsSelectors';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Web3 from 'web3';
-import {
-  useFloating,
-  offset,
-  autoUpdate,
-  arrow,
-  FloatingArrow,
-  flip,
-  shift,
-} from '@floating-ui/react';
-import styled from 'styled-components';
-import { generateBlockie } from '@features/global/utils/blockie.canvas';
-import { Badge } from '@root/components/ui/badge';
-import { CloseIcon } from '@root/images/icons/CloseIcon';
 import { parseEther } from 'viem';
-import { cn } from '@root/lib/utils';
+import Web3 from 'web3';
 
 interface Props {
   allTokens: string[] | null;
@@ -105,11 +100,12 @@ export const PartedMars = ({
     }
   }, []);
 
-  useEffect(() => {
-    if (!view.current) return;
-    const realView = view.current;
+  const realView = view.current;
 
-    realView.on('click', (evt) => {
+  useEffect(() => {
+    if (!realView) return;
+
+    const handleClick = (evt: any) => {
       const point = realView.toMap({ x: evt.x, y: evt.y });
 
       if (!point) return;
@@ -147,7 +143,9 @@ export const PartedMars = ({
       });
 
       setIsTooltipOpen(true);
-    });
+    };
+
+    realView.on('click', handleClick);
 
     realView.on('drag', () => {
       setIsTooltipOpen(false);
@@ -167,7 +165,7 @@ export const PartedMars = ({
         setIsTooltipOpen(false);
       }
     });
-  }, []);
+  }, [realView, refs]);
 
   useEffect(() => {
     if (myTokens === null || allTokens === null) return;
