@@ -340,7 +340,7 @@ export const ActiveLandsSidebarView = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Season 1 Finalists
+                  Seasons Finalists
                 </LearnMoreLink>
               </PrizeLinksSpan>
             </PrizeSpanWrapper>
