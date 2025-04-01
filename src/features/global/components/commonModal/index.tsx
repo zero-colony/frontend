@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
-import useOutsideClick from '@global/hooks/useOutsideClick';
-import { CloseIcon } from '@images/icons/CloseIcon';
-import styled, { css } from 'styled-components';
-import useResizeObserver from 'use-resize-observer';
+import React, { useRef } from "react";
+import useOutsideClick from "@global/hooks/useOutsideClick";
+import { CloseIcon } from "@images/icons/CloseIcon";
+import styled, { css } from "styled-components";
+import useResizeObserver from "use-resize-observer";
 
 const CommonModalOuterWrapper = styled.div`
   * {
@@ -134,9 +134,10 @@ export const CommonModal: React.FC<{
   scrollBP?: number;
   mobileClose?: boolean;
   isCloseButton?: boolean;
+  children?: React.ReactNode;
 }> = ({
   onClose,
-  width = '300px',
+  width = "300px",
   children,
   mobileBreakpoint = 900,
   border,
