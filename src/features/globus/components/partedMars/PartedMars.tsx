@@ -1,20 +1,21 @@
-import Graphic from '@arcgis/core/Graphic';
-import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
-import PolygonSymbol3D from '@arcgis/core/symbols/PolygonSymbol3D';
-import SceneView from '@arcgis/core/views/SceneView';
-import { generateBlockie } from '@features/global/utils/blockie.canvas';
+import Graphic from "@arcgis/core/Graphic";
+import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
+import PolygonSymbol3D from "@arcgis/core/symbols/PolygonSymbol3D";
+import SceneView from "@arcgis/core/views/SceneView";
+import { MOBILE_BREAKPOINT } from "@features/global/constants";
+import { generateBlockie } from "@features/global/utils/blockie.canvas";
 import {
   PartedMarsMainWrapper,
   PartedMarsViewWrapper,
-} from '@features/globus/styles/partedMars.styles';
-import { initView } from '@features/globus/utils/initView';
+} from "@features/globus/styles/partedMars.styles";
+import { initView } from "@features/globus/utils/initView";
 import {
   parseTokenNumber,
   simpleFillSymbol,
   toLat,
   toLong,
   toTokenNumber,
-} from '@features/globus/utils/methods';
+} from "@features/globus/utils/methods";
 import {
   arrow,
   autoUpdate,
@@ -23,14 +24,16 @@ import {
   offset,
   shift,
   useFloating,
-} from '@floating-ui/react';
-import { cn } from '@root/lib/utils';
-import { NETWORK_DATA } from '@root/settings';
-import { addressSelector } from '@selectors/userStatsSelectors';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { parseEther } from 'viem';
-import Web3 from 'web3';
+} from "@floating-ui/react";
+import { cn } from "@root/lib/utils";
+import { NETWORK_DATA } from "@root/settings";
+import { addressSelector } from "@selectors/userStatsSelectors";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import useResizeObserver from "use-resize-observer";
+import { useMediaQuery } from "usehooks-ts";
+import { parseEther } from "viem";
+import Web3 from "web3";
 
 interface Props {
   allTokens: string[] | null;
@@ -71,11 +74,11 @@ export const PartedMars = ({
 
   // Setup floating UI
   const { refs, floatingStyles, context, update } = useFloating({
-    placement: 'bottom',
+    placement: "bottom",
     middleware: [
       offset(10),
       flip({
-        fallbackPlacements: ['top', 'left', 'right'],
+        fallbackPlacements: ["top", "left", "right"],
         padding: 10,
       }),
       shift({
@@ -145,22 +148,22 @@ export const PartedMars = ({
       setIsTooltipOpen(true);
     };
 
-    realView.on('click', handleClick);
+    realView.on("click", handleClick);
 
-    realView.on('drag', () => {
+    realView.on("drag", () => {
       setIsTooltipOpen(false);
     });
 
-    realView.on('mouse-wheel', () => {
+    realView.on("mouse-wheel", () => {
       setIsTooltipOpen(false);
     });
 
-    realView.on('key-down', (event) => {
+    realView.on("key-down", (event) => {
       // Hide tooltip on arrow keys, +/- keys, etc.
       if (
-        event.key.includes('Arrow') ||
-        event.key === '+' ||
-        event.key === '-'
+        event.key.includes("Arrow") ||
+        event.key === "+" ||
+        event.key === "-"
       ) {
         setIsTooltipOpen(false);
       }
@@ -179,7 +182,7 @@ export const PartedMars = ({
         const longitudes: [number, number] = [toLong(x), toLong(x + 1)];
 
         const polygon = {
-          type: 'polygon',
+          type: "polygon",
           rings: [
             [longitudes[0], latitudes[0]],
             [longitudes[0], latitudes[1]],
@@ -236,7 +239,7 @@ export const PartedMars = ({
       const simpleFillSymbolGreen = new PolygonSymbol3D({
         symbolLayers: [
           {
-            type: 'fill',
+            type: "fill",
             material: { color: [139, 227, 79, 0.4] },
           },
         ],
@@ -253,7 +256,7 @@ export const PartedMars = ({
             const longitudes: [number, number] = [toLong(x), toLong(x + 1)];
 
             const polygon = {
-              type: 'polygon',
+              type: "polygon",
               rings: [
                 [longitudes[0], latitudes[0]],
                 [longitudes[0], latitudes[1]],
@@ -283,9 +286,9 @@ export const PartedMars = ({
   const isAvailable =
     tooltipData?.token && !allTokens?.includes(tooltipData.token.toString());
 
-  console.log('isMyToken', {});
+  console.log("isMyToken", {});
 
-  const isEnoughBalance = balanceInWei >= parseEther('0.009');
+  const isEnoughBalance = balanceInWei >= parseEther("0.009");
 
   const handleClaimToken = () => {
     if (!tooltipData?.token) return;
@@ -296,6 +299,8 @@ export const PartedMars = ({
       },
     });
   };
+
+  const isMobile = useMediaQuery(`(max-width: ${MOBILE_BREAKPOINT}px)`);
 
   return (
     <PartedMarsMainWrapper>
@@ -356,14 +361,14 @@ export const PartedMars = ({
                     <div className="text-sm text-zinc-400 font-normal">
                       Longitudes
                     </div>
-                    {tooltipData.longitudes[0].toFixed(2)} ..{' '}
+                    {tooltipData.longitudes[0].toFixed(2)} ..{" "}
                     {tooltipData.longitudes[1].toFixed(2)}
                   </div>
                   <div>
                     <div className="text-sm text-zinc-400 font-normal">
                       Latitudes
                     </div>
-                    {tooltipData.latitudes[0].toFixed(2)} ..{' '}
+                    {tooltipData.latitudes[0].toFixed(2)} ..{" "}
                     {tooltipData.latitudes[1].toFixed(2)}
                   </div>
 
@@ -371,9 +376,9 @@ export const PartedMars = ({
                     <div className="text-sm text-zinc-400 font-normal">
                       Status
                     </div>
-                    {isAvailable && !isMyToken && 'Available'}
-                    {isMyToken && 'Your land'}
-                    {!isAvailable && !isMyToken && 'Occupied'}
+                    {isAvailable && !isMyToken && "Available"}
+                    {isMyToken && "Your land"}
+                    {!isAvailable && !isMyToken && "Occupied"}
                   </div>
                 </div>
 
@@ -381,16 +386,18 @@ export const PartedMars = ({
                   {isAvailable && !isMyToken && (
                     <button
                       className={cn(
-                        'bg-primary cursor-pointer font-bold uppercase w-full px-4 py-2 rounded-md',
+                        "bg-primary cursor-pointer font-bold uppercase w-full px-4 py-2 rounded-md",
                         !isEnoughBalance &&
-                          'bg-white/10 !text-white/50 cursor-not-allowed text-sm'
+                          "bg-white/10 !text-white/50 cursor-not-allowed text-sm"
                       )}
                       disabled={!isEnoughBalance}
-                      onClick={handleClaimToken}
+                      onClick={isMobile ? () => {} : handleClaimToken}
                     >
-                      {isEnoughBalance
-                        ? 'Claim for 0.009 ETH'
-                        : 'Insufficient balance'}
+                      {isMobile
+                        ? "Use desktop"
+                        : isEnoughBalance
+                        ? "Claim for 0.009 ETH"
+                        : "Insufficient balance"}
                     </button>
                   )}
                 </div>
