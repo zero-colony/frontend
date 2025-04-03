@@ -18,7 +18,7 @@ const SocialIconsBar = () => {
         <img src="/icons/docs.svg" alt="Documentation" />
       </a> */}
       <a
-        href="https://github.com/marscolony-io"
+        href="https://github.com/zero-colony"
         target="_blank"
         rel="noopener noreferrer"
       >
