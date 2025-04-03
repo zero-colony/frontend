@@ -6,7 +6,7 @@ import {
   LIGHT_GRAY,
   LIGHT_GREY,
   TOXIC_GREEN,
-  WHITE
+  WHITE,
 } from '@global/styles/variables';
 import styled, { css } from 'styled-components';
 
@@ -60,7 +60,7 @@ const SidebarMobileControl = styled.div<{ isOpened?: boolean }>`
   svg {
     transition: all 0.3s;
     cursor: pointer;
-    
+
     &:hover {
       transform: rotate(-90deg);
     }
@@ -71,6 +71,11 @@ const SidebarMobileControl = styled.div<{ isOpened?: boolean }>`
         `;
       }
     }}
+  }
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const SidebarTitle = styled.p`
@@ -230,5 +235,5 @@ export {
   SidebarItemWrapper,
   SidebarMobileControl,
   SidebarTitle,
-  SidebarWrapper
+  SidebarWrapper,
 };

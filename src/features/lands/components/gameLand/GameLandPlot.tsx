@@ -60,6 +60,7 @@ export const GameLandPlot = ({
                 <LandPlotDescriptionB marginTop={15}>
                   {Boolean(earningSpeed) && (
                     <>
+                      <span className="sm:hidden text-[#c4c4c4]">Mining: </span>
                       {NETWORK_DATA.ECONOMY === 'fixed'
                         ? getClnySpeedLabel(earningSpeed)
                         : `${earningSpeed} ${

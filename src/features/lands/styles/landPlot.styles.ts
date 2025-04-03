@@ -25,6 +25,13 @@ const LandPlotDescriptionB = styled.div<{
   margin-top: ${({ marginTop }) => marginTop ?? 'unset'};
   background: #1c1c1f;
   border-radius: 3px;
+
+  @media (max-width: 768px) {
+    background: transparent;
+    padding: 0;
+    font-size: 12px;
+    line-height: 13.8px;
+  }
 `;
 
 const LandPlotLink = styled.div`
@@ -254,12 +261,21 @@ const GamePageDetailedInfo = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+
+  @media (max-width: 768px) {
+    gap: 8px;
+  }
 `;
 
 const GamePageDetailedStats = styled.div`
   display: flex;
   align-items: center;
   gap: 6px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const GamePageInfoButtonContainer = styled.div`
@@ -269,6 +285,10 @@ const GamePageInfoButtonContainer = styled.div`
   padding-left: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
+
+  @media (max-width: 768px) {
+    gap: 20px;
+  }
 `;
 
 const GamePageDetailedButton = styled.div`
@@ -299,6 +319,10 @@ const GamePageEnhancementsOverlay = styled.div<{ isMobile?: boolean }>`
   backdrop-filter: blur(10px);
   border-radius: 4px;
   z-index: -1;
+
+  @media (max-width: 768px) {
+    min-width: 100vw;
+  }
 `;
 
 const NewDexWrapper = styled.div<{ isMobileView?: boolean }>`

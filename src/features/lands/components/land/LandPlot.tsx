@@ -74,7 +74,13 @@ export const LandPlot: React.FC<Props> = ({ id, trigger }) => {
   if (isLoadingAttributes) return null;
 
   const enhancementsItemsList = (
-    <EnhancementsListWrapper isMobileView={isMobile}>
+    <div
+      className={
+        isMobile
+          ? 'grid grid-cols-2 gap-4 place-items-center w-[100vw]'
+          : 'flex justify-around'
+      }
+    >
       <Enhancement
         Image={BaseStationIcon}
         title="Electricity"
@@ -154,7 +160,7 @@ export const LandPlot: React.FC<Props> = ({ id, trigger }) => {
         isMobileView={isMobile}
         isPending={isPendingBuildPowerProduction}
       />
-    </EnhancementsListWrapper>
+    </div>
   );
 
   return (
