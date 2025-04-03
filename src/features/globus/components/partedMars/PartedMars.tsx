@@ -1,39 +1,33 @@
-import Graphic from "@arcgis/core/Graphic";
-import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
-import PolygonSymbol3D from "@arcgis/core/symbols/PolygonSymbol3D";
-import SceneView from "@arcgis/core/views/SceneView";
-import { MOBILE_BREAKPOINT } from "@features/global/constants";
-import { generateBlockie } from "@features/global/utils/blockie.canvas";
+import Graphic from '@arcgis/core/Graphic';
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+import PolygonSymbol3D from '@arcgis/core/symbols/PolygonSymbol3D';
+import SceneView from '@arcgis/core/views/SceneView';
 import {
   PartedMarsMainWrapper,
   PartedMarsViewWrapper,
-} from "@features/globus/styles/partedMars.styles";
-import { initView } from "@features/globus/utils/initView";
+} from '@features/globus/styles/partedMars.styles';
+import { initView } from '@features/globus/utils/initView';
 import {
   parseTokenNumber,
   simpleFillSymbol,
   toLat,
   toLong,
   toTokenNumber,
-} from "@features/globus/utils/methods";
+} from '@features/globus/utils/methods';
 import {
   arrow,
   autoUpdate,
   flip,
-  FloatingArrow,
   offset,
   shift,
   useFloating,
-} from "@floating-ui/react";
-import { cn } from "@root/lib/utils";
-import { NETWORK_DATA } from "@root/settings";
-import { addressSelector } from "@selectors/userStatsSelectors";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import useResizeObserver from "use-resize-observer";
-import { useMediaQuery } from "usehooks-ts";
-import { parseEther } from "viem";
-import Web3 from "web3";
+} from '@floating-ui/react';
+import { NETWORK_DATA } from '@root/settings';
+import { addressSelector } from '@selectors/userStatsSelectors';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import Web3 from 'web3';
+import { LandPlotTooltip, TooltipData } from './LandPlotTooltip';
 
 interface Props {
   allTokens: string[] | null;
@@ -62,23 +56,19 @@ export const PartedMars = ({
   const view = React.useRef<SceneView | null>(null);
   const tokensLayer = React.useRef<GraphicsLayer | null>(null);
   const address = useSelector(addressSelector);
-  const arrowRef = React.useRef(null);
+  const arrowRef = React.useRef<SVGSVGElement>(null);
 
   // Tooltip state
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
-  const [tooltipData, setTooltipData] = useState<{
-    longitudes: number[];
-    latitudes: number[];
-    token: number;
-  } | null>(null);
+  const [tooltipData, setTooltipData] = useState<TooltipData | null>(null);
 
   // Setup floating UI
   const { refs, floatingStyles, context, update } = useFloating({
-    placement: "bottom",
+    placement: 'bottom',
     middleware: [
       offset(10),
       flip({
-        fallbackPlacements: ["top", "left", "right"],
+        fallbackPlacements: ['top', 'left', 'right'],
         padding: 10,
       }),
       shift({
@@ -108,7 +98,7 @@ export const PartedMars = ({
   useEffect(() => {
     if (!realView) return;
 
-    const handleClick = (evt: any) => {
+    const handleClick = (evt: { x: number; y: number }) => {
       const point = realView.toMap({ x: evt.x, y: evt.y });
 
       if (!point) return;
@@ -148,22 +138,22 @@ export const PartedMars = ({
       setIsTooltipOpen(true);
     };
 
-    realView.on("click", handleClick);
+    realView.on('click', handleClick);
 
-    realView.on("drag", () => {
+    realView.on('drag', () => {
       setIsTooltipOpen(false);
     });
 
-    realView.on("mouse-wheel", () => {
+    realView.on('mouse-wheel', () => {
       setIsTooltipOpen(false);
     });
 
-    realView.on("key-down", (event) => {
+    realView.on('key-down', (event) => {
       // Hide tooltip on arrow keys, +/- keys, etc.
       if (
-        event.key.includes("Arrow") ||
-        event.key === "+" ||
-        event.key === "-"
+        event.key.includes('Arrow') ||
+        event.key === '+' ||
+        event.key === '-'
       ) {
         setIsTooltipOpen(false);
       }
@@ -182,7 +172,7 @@ export const PartedMars = ({
         const longitudes: [number, number] = [toLong(x), toLong(x + 1)];
 
         const polygon = {
-          type: "polygon",
+          type: 'polygon',
           rings: [
             [longitudes[0], latitudes[0]],
             [longitudes[0], latitudes[1]],
@@ -239,7 +229,7 @@ export const PartedMars = ({
       const simpleFillSymbolGreen = new PolygonSymbol3D({
         symbolLayers: [
           {
-            type: "fill",
+            type: 'fill',
             material: { color: [139, 227, 79, 0.4] },
           },
         ],
@@ -256,7 +246,7 @@ export const PartedMars = ({
             const longitudes: [number, number] = [toLong(x), toLong(x + 1)];
 
             const polygon = {
-              type: "polygon",
+              type: 'polygon',
               rings: [
                 [longitudes[0], latitudes[0]],
                 [longitudes[0], latitudes[1]],
@@ -280,28 +270,6 @@ export const PartedMars = ({
     }
   }, [allTokens, myTokens, tokensLayer]);
 
-  const isMyToken =
-    tooltipData?.token && myTokens?.includes(tooltipData.token.toString());
-
-  const isAvailable =
-    tooltipData?.token && !allTokens?.includes(tooltipData.token.toString());
-
-  console.log("isMyToken", {});
-
-  const isEnoughBalance = balanceInWei >= parseEther("0.009");
-
-  const handleClaimToken = () => {
-    if (!tooltipData?.token) return;
-
-    handleClaim(tooltipData.token, {
-      onSuccess: () => {
-        setIsTooltipOpen(false);
-      },
-    });
-  };
-
-  const isMobile = useMediaQuery(`(max-width: ${MOBILE_BREAKPOINT}px)`);
-
   return (
     <PartedMarsMainWrapper>
       <PartedMarsViewWrapper
@@ -310,102 +278,17 @@ export const PartedMars = ({
         ref={refs.setReference}
       />
 
-      {/* Tooltip */}
-      {isTooltipOpen && tooltipData && (
-        <div
-          className="bg-black/75 relative rounded-lg backdrop-blur-xs text-white p-4"
-          ref={refs.setFloating}
-          style={floatingStyles}
-        >
-          <FloatingArrow
-            ref={arrowRef}
-            context={context}
-            fill="rgba(0, 0, 0, 0.75)"
-          />
-
-          <button
-            className="absolute top-0 right-0 p-4 cursor-pointer"
-            onClick={() => setIsTooltipOpen(false)}
-          >
-            <svg
-              className="size-4 text-zinc-400"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
-          </button>
-
-          <div className="flex flex-col gap-4">
-            <div className="font-bold text-lg leading-none">
-              Land plot #{tooltipData.token}
-            </div>
-
-            <div className="flex gap-6">
-              <img
-                src={generateBlockie(tooltipData.token).toDataURL()}
-                className="h-40 w-40"
-              />
-
-              <div className="flex flex-col gap-4 justify-between">
-                <div className="grid grid-cols-2 gap-x-6 gap-y-2 font-medium">
-                  <div>
-                    <div className="text-sm text-zinc-400 font-normal">
-                      Longitudes
-                    </div>
-                    {tooltipData.longitudes[0].toFixed(2)} ..{" "}
-                    {tooltipData.longitudes[1].toFixed(2)}
-                  </div>
-                  <div>
-                    <div className="text-sm text-zinc-400 font-normal">
-                      Latitudes
-                    </div>
-                    {tooltipData.latitudes[0].toFixed(2)} ..{" "}
-                    {tooltipData.latitudes[1].toFixed(2)}
-                  </div>
-
-                  <div>
-                    <div className="text-sm text-zinc-400 font-normal">
-                      Status
-                    </div>
-                    {isAvailable && !isMyToken && "Available"}
-                    {isMyToken && "Your land"}
-                    {!isAvailable && !isMyToken && "Occupied"}
-                  </div>
-                </div>
-
-                <div>
-                  {isAvailable && !isMyToken && (
-                    <button
-                      className={cn(
-                        "bg-primary cursor-pointer font-bold uppercase w-full px-4 py-2 rounded-md",
-                        !isEnoughBalance &&
-                          "bg-white/10 !text-white/50 cursor-not-allowed text-sm"
-                      )}
-                      disabled={!isEnoughBalance}
-                      onClick={isMobile ? () => {} : handleClaimToken}
-                    >
-                      {isMobile
-                        ? "Use desktop"
-                        : isEnoughBalance
-                        ? "Claim for 0.009 ETH"
-                        : "Insufficient balance"}
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <LandPlotTooltip
+        isOpen={isTooltipOpen}
+        setIsOpen={setIsTooltipOpen}
+        data={tooltipData}
+        myTokens={myTokens}
+        allTokens={allTokens}
+        balanceInWei={balanceInWei}
+        handleClaim={handleClaim}
+        floatingProps={{ refs, floatingStyles, context }}
+        arrowRef={arrowRef}
+      />
     </PartedMarsMainWrapper>
   );
 };
