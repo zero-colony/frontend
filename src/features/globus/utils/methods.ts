@@ -82,8 +82,8 @@ export const simpleFillSymbol = (color: [number, number, number, number]) =>
     ],
   });
 
-export const formatWallet = (address: string): string => {
-  return address.substr(0, 6) + '...' + address.substr(address.length - 6);
+export const formatWallet = (address: string, symbols = 6): string => {
+  return address.slice(0, symbols) + '...' + address.slice(-symbols);
 };
 
 function fallbackCopyTextToClipboard(text: string) {

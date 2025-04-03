@@ -225,16 +225,10 @@ const NewHeaderInfoWrapper = styled.div`
   background: #2e2e34;
   border-radius: 10px;
   align-items: center;
+  width: fit-content;
 
   * {
     user-select: none;
-  }
-
-  @media screen and (max-width: ${MOBILE_BREAKPOINT}px) {
-    flex-direction: column;
-    gap: 10px;
-    align-items: baseline;
-    padding: 10px 0 0;
   }
 `;
 
