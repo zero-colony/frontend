@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Map, RefreshCw, Trophy } from 'lucide-react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { LINKS } from '@global/constants';
+import { LINKS, MOBILE_BREAKPOINT } from '@global/constants';
 import { StatsBar } from '@features/global/components/statsBar';
 import SocialIconsBar from '@features/lands/components/landsSidebar/SocialIconsBar';
 import {
@@ -24,6 +24,10 @@ import useAppParts from '@global/hooks/useAppParts';
 import Button from '@global/components/button';
 import { fromWeiValue } from '@global/utils/fromWei';
 import Backend from '@root/api/backend';
+import { setLandPageNumber } from '@slices/appPartsSlice';
+import { useDispatch } from 'react-redux';
+import { ArrowLeft, ArrowRight } from '@images/icons/ArrowDown';
+import { useMediaQuery } from 'usehooks-ts';
 
 // Prize stats type
 interface PrizeStats {
@@ -125,14 +129,61 @@ const DialogTitle = ({ children }: { children: React.ReactNode }) => (
 const DialogCloseButton = ({ onClick }: { onClick: () => void }) => (
   <button
     onClick={onClick}
-    className="absolute top-4 right-4 text-white hover:text-red-400"
+    className="absolute top-4 right-4 focus-within:outline-none text-white hover:text-red-400"
   >
     <CloseIcon />
   </button>
 );
 
+// Pagination component from LandsSidebar
+const LandsPagination = ({
+  currentPage,
+  tokens = [],
+}: {
+  currentPage: number;
+  tokens: string[];
+}) => {
+  const dispatch = useDispatch();
+
+  const goToPrevPage = () => dispatch(setLandPageNumber(currentPage - 1));
+  const goToNextPage = () => dispatch(setLandPageNumber(currentPage + 1));
+
+  const startItem = (currentPage - 1) * 10 + 1;
+  const endItem = Math.min(currentPage * 10, tokens.length);
+  const hasNextPage = tokens.length > currentPage * 10;
+  const hasPrevPage = currentPage > 1;
+
+  return (
+    <div className="flex items-center justify-center mt-4 mb-6 text-white">
+      <div className="border-t border-white/10 w-full my-2" />
+      <div className="flex-none">
+        <div className="w-8 flex justify-center">
+          {hasPrevPage && (
+            <button onClick={goToPrevPage} className="hover:text-red-400">
+              <ArrowLeft />
+            </button>
+          )}
+        </div>
+        <div className="mx-4 text-sm">
+          {startItem}-{endItem} of {tokens.length}
+        </div>
+        <div className="w-8 flex justify-center">
+          {hasNextPage && (
+            <button onClick={goToNextPage} className="hover:text-red-400">
+              <ArrowRight />
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="border-t border-white/10 w-full my-2" />
+    </div>
+  );
+};
+
 export const MobileNavigation = () => {
-  const [isLandsOpen, setIsLandsOpen] = useState(false);
+  const isMobile = useMediaQuery(`(max-width: ${MOBILE_BREAKPOINT}px)`);
+
+  const [isLandsOpen, setIsLandsOpen] = useState(isMobile);
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
   const { currentLandsPage } = useAppParts();
   const { addToast } = useToasts();
@@ -249,6 +300,13 @@ export const MobileNavigation = () => {
                         </div>
                       ))}
                     </div>
+
+                    {tokens && tokens.length > 0 && (
+                      <LandsPagination
+                        currentPage={currentLandsPage}
+                        tokens={tokens}
+                      />
+                    )}
                   </div>
                 ) : (
                   <div className="text-center">
@@ -278,8 +336,6 @@ export const MobileNavigation = () => {
                         )}
                       </>
                     )}
-
-                    <PrizePool prizeStats={prizeStats} />
                   </div>
                 )}
               </div>

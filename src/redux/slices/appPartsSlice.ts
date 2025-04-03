@@ -13,13 +13,13 @@ export interface AppPartsInterface {
 
 const initialState: AppPartsInterface = {
   isConnectionPopupOpened: false,
-  isMyLandsShown: true,
+  isMyLandsShown: false,
   myLandsPageNumber: 1,
   isLandMissionsAvailable: false,
   isPrivateAccount: null,
   isRevshareModalOpened: false,
   isGearPopupOpened: false,
-  isLeaderboardPopupOpened: false
+  isLeaderboardPopupOpened: false,
 };
 
 export const appPartsSlice = createSlice({
@@ -37,15 +37,15 @@ export const appPartsSlice = createSlice({
     },
     setLandPageNumber: (state, action) => {
       state.myLandsPageNumber = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const {
   toggleConnectionPopup,
   toggleMyLandsPopup,
   setLandPageNumber,
-  toggleLeaderboardPopup
+  toggleLeaderboardPopup,
 } = appPartsSlice.actions;
 
 export default appPartsSlice.reducer;

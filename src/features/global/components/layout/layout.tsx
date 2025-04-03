@@ -1,25 +1,25 @@
-import { FC } from 'react';
 import { ConnectionZone } from '@features/global/components/connectionZone/connectionZone';
 import {
   ConnectionZoneWrapper,
   LayoutWrapper,
 } from '@global/components/layout/layout.styles';
 import Sidebar from '@global/components/sidebar';
-import { MOBILE_BREAKPOINT } from '@global/constants';
+import useAppInitialization from '@global/hooks/useAppInitialization';
+import { FC, ReactNode } from 'react';
 
-import useResizeObserver from 'use-resize-observer';
+interface LayoutProps {
+  children: ReactNode;
+}
 
-const Layout: FC = ({ children }) => {
-  const { ref: wrapperRef, width: containerWidth } = useResizeObserver();
-
-  const isMobile = (containerWidth ?? 0) < MOBILE_BREAKPOINT;
+const Layout: FC<LayoutProps> = ({ children }) => {
+  useAppInitialization();
 
   return (
-    <LayoutWrapper ref={wrapperRef}>
+    <LayoutWrapper>
       <ConnectionZoneWrapper>
         <ConnectionZone />
       </ConnectionZoneWrapper>
-      <Sidebar isMobile={isMobile} />
+      <Sidebar />
       {children}
     </LayoutWrapper>
   );
