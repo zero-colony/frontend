@@ -185,8 +185,12 @@ export const useResetLandStats = () => {
             previousData: data,
           });
 
-          // Keep the earning speed (data[1]) but reset the earned amount (data[0]) to 0
-          return [0, data[1]];
+          // Check if data exists and has the expected structure
+          const earnSpeed =
+            data && Array.isArray(data) && data.length > 1 ? data[1] : 0;
+
+          // Return new array with reset earned amount and preserved earning speed
+          return [0, earnSpeed];
         });
       }
     });
