@@ -213,12 +213,19 @@
       const linksPopup = document.getElementById('linksPopup');
       const closeLinksBtn = document.getElementById('closeLinksBtn');
 
-      // Check if the user has completed onboarding
+      // Check if user is on mobile
+      const isMobile =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
 
-      if (localStorage.getItem('onboarding_completed') !== null) {
+      // Hide popup on mobile devices
+      if (isMobile) {
+        popup.style.display = 'none';
+      } else if (localStorage.getItem('onboarding_completed') !== null) {
+        // On desktop, check if the user has completed onboarding
         popup.style.display = 'none';
       }
-      // Listen for claim land events to show links popup
 
       // Add a click event to the close button to hide the popup.
       closeBtn.addEventListener('click', () => {
@@ -234,7 +241,9 @@
 
       // Global function to open links popup
       window.openLinksPopup = function () {
-        linksPopup.style.display = 'flex';
+        if (!isMobile) {
+          linksPopup.style.display = 'flex';
+        }
       };
     </script>
 

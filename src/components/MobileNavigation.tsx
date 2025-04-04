@@ -28,6 +28,7 @@ import { setLandPageNumber } from '@slices/appPartsSlice';
 import { useDispatch } from 'react-redux';
 import { ArrowLeft, ArrowRight } from '@images/icons/ArrowDown';
 import { useMediaQuery } from 'usehooks-ts';
+import { LandsPagination } from '@features/lands/components/landsSidebar';
 
 // Prize stats type
 interface PrizeStats {
@@ -135,51 +136,6 @@ const DialogCloseButton = ({ onClick }: { onClick: () => void }) => (
   </button>
 );
 
-// Pagination component from LandsSidebar
-const LandsPagination = ({
-  currentPage,
-  tokens = [],
-}: {
-  currentPage: number;
-  tokens: string[];
-}) => {
-  const dispatch = useDispatch();
-
-  const goToPrevPage = () => dispatch(setLandPageNumber(currentPage - 1));
-  const goToNextPage = () => dispatch(setLandPageNumber(currentPage + 1));
-
-  const startItem = (currentPage - 1) * 10 + 1;
-  const endItem = Math.min(currentPage * 10, tokens.length);
-  const hasNextPage = tokens.length > currentPage * 10;
-  const hasPrevPage = currentPage > 1;
-
-  return (
-    <div className="flex items-center justify-center mt-4 mb-6 text-white">
-      <div className="border-t border-white/10 w-full my-2" />
-      <div className="flex-none">
-        <div className="w-8 flex justify-center">
-          {hasPrevPage && (
-            <button onClick={goToPrevPage} className="hover:text-red-400">
-              <ArrowLeft />
-            </button>
-          )}
-        </div>
-        <div className="mx-4 text-sm">
-          {startItem}-{endItem} of {tokens.length}
-        </div>
-        <div className="w-8 flex justify-center">
-          {hasNextPage && (
-            <button onClick={goToNextPage} className="hover:text-red-400">
-              <ArrowRight />
-            </button>
-          )}
-        </div>
-      </div>
-      <div className="border-t border-white/10 w-full my-2" />
-    </div>
-  );
-};
-
 export const MobileNavigation = () => {
   const isMobile = useMediaQuery(`(max-width: ${MOBILE_BREAKPOINT}px)`);
 
@@ -201,6 +157,7 @@ export const MobileNavigation = () => {
   const hasLands = Boolean(tokens?.length);
 
   const handleOpenLands = () => {
+    setIsLeaderboardOpen(false);
     setIsLandsOpen(true);
   };
 
@@ -209,6 +166,7 @@ export const MobileNavigation = () => {
   };
 
   const handleOpenLeaderboard = () => {
+    setIsLandsOpen(false);
     setIsLeaderboardOpen(true);
   };
 
@@ -221,6 +179,7 @@ export const MobileNavigation = () => {
   };
 
   const onBuyLandClick = () => {
+    setIsLandsOpen(false);
     addToast('You can buy new lands on the globe', { appearance: 'info' });
   };
 
@@ -258,10 +217,10 @@ export const MobileNavigation = () => {
         onOpenChange={(open) => !open && handleCloseLands()}
       >
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" />
-          <Dialog.Content className="fixed inset-0 z-50 bg-black/50 overflow-y-auto p-4">
+          <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-xs z-40" />
+          <Dialog.Content className="fixed inset-0 z-50 overflow-y-auto p-4">
             <DialogCloseButton onClick={handleCloseLands} />
-            <div className="pt-6">
+            <div className="pt-6 pb-16">
               <SocialIconsBar />
               <StatsBar />
 
@@ -350,10 +309,10 @@ export const MobileNavigation = () => {
         onOpenChange={(open) => !open && handleCloseLeaderboard()}
       >
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/75 backdrop-blur-sm z-40" />
+          <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" />
           <Dialog.Content className="fixed inset-0 z-50 overflow-y-auto p-4">
             <DialogCloseButton onClick={handleCloseLeaderboard} />
-            <div className="pt-8">
+            <div className="pt-8 pb-16">
               <DialogTitle>Leaderboard</DialogTitle>
 
               {isLeaderboardLoading ? (
@@ -433,7 +392,8 @@ export const MobileNavigation = () => {
       </Dialog.Root>
 
       {/* Bottom Navigation Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-black/80 py-1 shadow-lg backdrop-blur-xs sm:hidden z-30">
+
+      <div className="sticky bottom-0 pointer-events-auto left-0 right-0 bg-black/80 py-1 shadow-lg backdrop-blur-xs sm:hidden z-[99]">
         <div className="flex justify-around h-16 items-center">
           <NavItem
             icon={<Map size={20} />}

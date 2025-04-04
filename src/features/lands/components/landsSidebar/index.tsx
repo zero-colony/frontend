@@ -320,7 +320,7 @@ export const ActiveLandsSidebarView = () => {
   );
 };
 
-const LandsPagination = ({
+export const LandsPagination = ({
   currentPage,
   tokens = [],
 }: {
