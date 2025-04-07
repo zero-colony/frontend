@@ -1,22 +1,13 @@
-import { fontProperty } from '@global/styles/fonts.styles';
-import styled, { css } from 'styled-components';
+import { fontProperty } from "@global/styles/fonts.styles";
+import styled, { css } from "styled-components";
 
 const EnhancementItemWrapper = styled.div<{ isMobileView?: boolean }>`
-  flex: 1;
   text-align: center;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  ${({ isMobileView }) => {
-    if (isMobileView) {
-      return css`
-        max-width: fit-content;
-        flex: unset;
-      `;
-    }
-  }}
+  width: 112px;
 `;
 
 const EnhAux = styled.div`
@@ -25,7 +16,7 @@ const EnhAux = styled.div`
   top: 10px;
   background: rgba(75, 222, 151, 0.1);
   border-radius: 3px;
-  font-family: 'Play', sans-serif;
+  font-family: "Play", sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 10px;
@@ -40,7 +31,7 @@ const EnhImageWrapper = styled.div<{ minified?: boolean; isActive?: boolean }>`
     if (minified) {
       return css`
         * {
-          fill: ${isActive ? '#fe5161' : 'white'};
+          fill: ${isActive ? "#fe5161" : "white"};
         }
 
         svg {
@@ -53,7 +44,7 @@ const EnhImageWrapper = styled.div<{ minified?: boolean; isActive?: boolean }>`
     if (!minified) {
       return css`
         * {
-          fill: ${isActive ? '#fe5161' : 'white'};
+          fill: ${isActive ? "#fe5161" : "white"};
         }
 
         svg {

@@ -1,8 +1,8 @@
-import { GameLandPlot } from '@features/lands/components/gameLand/GameLandPlot';
-import { OLD_NEW, PRICES } from '@features/lands/constants';
-import { EnhancementsListWrapper } from '@features/lands/styles/landPlot.styles';
-import useGameManagement from '@global/hooks/useGameManagement';
-import React from 'react';
+import { GameLandPlot } from "@features/lands/components/gameLand/GameLandPlot";
+import { OLD_NEW, PRICES } from "@features/lands/constants";
+import { EnhancementsListWrapper } from "@features/lands/styles/landPlot.styles";
+import useGameManagement from "@global/hooks/useGameManagement";
+import React from "react";
 import {
   useBuildBaseStation,
   useBuildPowerProduction,
@@ -10,13 +10,13 @@ import {
   useBuildTransport,
   useCLNYBalance,
   useLandStats,
-} from '@features/global/hooks/useCallContracts';
-import useMediaQuery from '@global/hooks/useMediaQuery';
-import { BaseStationIcon } from '@images/icons/BaseStationIcon';
-import { Power } from '@images/icons/Power';
-import { RobotAssembly } from '@images/icons/RobotAssembly';
-import { Transport } from '@images/icons/Transport';
-import { Enhancement } from '@root/legacy/enhancement/Enhancement';
+} from "@features/global/hooks/useCallContracts";
+import useMediaQuery from "@global/hooks/useMediaQuery";
+import { BaseStationIcon } from "@images/icons/BaseStationIcon";
+import { Power } from "@images/icons/Power";
+import { RobotAssembly } from "@images/icons/RobotAssembly";
+import { Transport } from "@images/icons/Transport";
+import { Enhancement } from "@root/legacy/enhancement/Enhancement";
 
 type Props = {
   id: number;
@@ -26,7 +26,7 @@ type Props = {
 };
 
 export const LandPlot: React.FC<Props> = ({ id, trigger }) => {
-  const isMobile = useMediaQuery('(max-width: 1200px)');
+  const isMobile = useMediaQuery("(max-width: 1200px)");
   const { clnyBalanceWei: CLNYBalanceWei } = useCLNYBalance();
 
   const {
@@ -69,23 +69,17 @@ export const LandPlot: React.FC<Props> = ({ id, trigger }) => {
     power: () => buildPowerProduction(powerProductionLevel + 1),
   };
 
-  const isBuyProcess = '';
+  const isBuyProcess = "";
 
   if (isLoadingAttributes) return null;
 
   const enhancementsItemsList = (
-    <div
-      className={
-        isMobile
-          ? 'grid grid-cols-2 gap-4 place-items-center w-[100vw]'
-          : 'flex justify-around'
-      }
-    >
+    <div className="grid grid-cols-2 gap-4 place-items-center w-[100vw] sm:flex sm:justify-around sm:w-auto items-start">
       <Enhancement
         Image={BaseStationIcon}
         title="Electricity"
         speed={hasBaseStation ? 1 : undefined}
-        finalText={hasBaseStation ? 'Claimed' : undefined}
+        finalText={hasBaseStation ? "Claimed" : undefined}
         getWhat=""
         price={30}
         oldNew={
@@ -105,10 +99,10 @@ export const LandPlot: React.FC<Props> = ({ id, trigger }) => {
       />
       <Enhancement
         Image={RobotAssembly}
-        title="Data Centre"
+        title="Data Center"
         aux={`lvl${robotAssemblyLevel}/3`}
         speed={robotAssemblyLevel ? robotAssemblyLevel + 1 : undefined}
-        finalText={robotAssemblyLevel === 3 ? 'Max LVL' : undefined}
+        finalText={robotAssemblyLevel === 3 ? "Max LVL" : undefined}
         getWhat={`LVL ${robotAssemblyLevel + 1}`}
         price={PRICES[robotAssemblyLevel + 1]}
         oldNew={OLD_NEW[robotAssemblyLevel] as [number, number] | undefined}
@@ -127,7 +121,7 @@ export const LandPlot: React.FC<Props> = ({ id, trigger }) => {
         title="Blockchain Node"
         aux={`lvl${transportLevel}/3`}
         speed={transportLevel ? transportLevel + 1 : undefined}
-        finalText={transportLevel === 3 ? 'Max LVL' : undefined}
+        finalText={transportLevel === 3 ? "Max LVL" : undefined}
         getWhat={`LVL ${transportLevel + 1}`}
         price={PRICES[transportLevel + 1]}
         oldNew={OLD_NEW[transportLevel] as [number, number] | undefined}
@@ -146,7 +140,7 @@ export const LandPlot: React.FC<Props> = ({ id, trigger }) => {
         title="AI Lab"
         aux={`lvl${powerProductionLevel}/3`}
         speed={powerProductionLevel ? powerProductionLevel + 1 : undefined}
-        finalText={powerProductionLevel === 3 ? 'Max LVL' : undefined}
+        finalText={powerProductionLevel === 3 ? "Max LVL" : undefined}
         getWhat={`LVL ${powerProductionLevel + 1}`}
         price={PRICES[powerProductionLevel + 1]}
         oldNew={OLD_NEW[powerProductionLevel] as [number, number] | undefined}
