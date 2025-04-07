@@ -25,7 +25,9 @@ export const wagmiConfig = createConfig(
 
     transports: {
       // RPC URL for each chain
-      [zeroNetwork.id]: http('https://zero.drpc.org'),
+      [zeroNetwork.id]: http(
+        'https://zero-network.calderachain.xyz/infra-partner-http'
+      ),
       [zeroTestnet.id]: http('https://rpc.zerion.io/v1/zero-sepolia'),
     },
 
